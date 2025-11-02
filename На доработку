@@ -165,17 +165,7 @@ public:
     // Метод для входа студента
     void student_behavior(int group, int student_id) {
         while (!stop_flag) {
-            // Проверим условие выхода
-            {
-                std::lock_guard<std::mutex> lock(mtx);
-                if ((group == 1 && visits_ks40[student_id] >= 2) ||
-                    (group == 2 && visits_ks44[student_id] >= 2)) {
-                    // Завершил
-                    // std::cout << "Студент " << student_id << " из " << (group==1?"КС-40":"КС-44") << " завершил\n";
-                    return;
-                }
-            }
-
+            
             // Перед попыткой — жду случайное S (1 или 2) секунд (симулирует решение прийти и ждать)
             int S = get_random_time();
             // Попытка войти: пробуем под мьютексом
@@ -189,11 +179,7 @@ public:
                 // Ждем возможности войти (место и либо нет пары, либо пара нашей группы).
                 while (true) {
                     if (stop_flag) return;
-
-                    // если уже закончил за время ожидания
-                    if ((group == 1 && visits_ks40[student_id] >= 2) ||
-                        (group == 2 && visits_ks44[student_id] >= 2)) return;
-
+            
                     bool can_enter_now = (occupancy < capacity) && (!class_in_session || current_group == group);
 
                     if (can_enter_now) {

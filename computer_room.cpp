@@ -184,7 +184,7 @@ void ComputerRoom::student_behavior(int group, int student_id) {
 
                 if (can_enter_now) {
                     // Когла получилось войти в класс, обновляем его заполненность
-=                        occupancy++;
+                    occupancy++;
                     if (group == 1) { 
                         in_room_ks40[student_id] = true; 
                         present_ks40++; 

@@ -38,7 +38,7 @@ bool ComputerRoom::can_start_class(int group) {
 }
 
 /**
- * @brief Запускает занятие для указанной группы, выгоняет студентов другой, отмечает посещения.
+ * @brief Запускает занятие для указанной группы, выгоняет студентов другой, отмечает посещения, поток преподавателя для завершения занятия через 5 секунд.
  * 
  * @param group Номер группы (1 - КС-40, 2 - КС-44)
  */
@@ -83,7 +83,7 @@ void ComputerRoom::start_class_locked(int group) {
                 in_room_ks40[i] = false;
                 present_ks40--;
                 occupancy--;
-                std::cout << "   👋 Выгнан студент КС-40 №" << i << " (занятие для КС-44)\n";
+                std::cout << "    Выгнан студент КС-40 №" << i << " (занятие для КС-44)\n";
             }
             attended_this_session_ks40[i] = false;
         }
@@ -91,11 +91,59 @@ void ComputerRoom::start_class_locked(int group) {
             if (in_room_ks44[i] && !attended_this_session_ks44[i]) {
                 visits_ks44[i]++;
                 attended_this_session_ks44[i] = true;
-                std::cout << "   ✅ Посещение засчитано: КС-44 студент №" << i 
+                std::cout << "    Посещение засчитано: КС-44 студент №" << i 
                           << " (всего: " << visits_ks44[i] << " посещений)\n";
             }
         }
     }
+
+    // Оповестить всех о начале занятия
+    cv.notify_all();
+
+    // Запустить поток преподавателя для завершения занятия через 5 секунд
+    std::thread([this]() {
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        if (!stop_flag) {
+            std::unique_lock<std::mutex> lock(this->mtx);
+            if (!this->class_in_session) return;
+            
+            std::cout << "\n" << std::string(60, '=') << "\n";
+            std::cout << "Завершение занятия для группы " << (this->current_group == 1 ? "КС-40" : "КС-44") << "\n";
+            
+            // Преподаватель выводит всех оставшихся студентов
+            int exited_count = 0;
+            for (int i = 0; i < this->total_ks40; ++i) {
+                if (this->in_room_ks40[i]) {
+                    this->in_room_ks40[i] = false;
+                    this->present_ks40--;
+                    this->occupancy--;
+                    exited_count++;
+                }
+            }
+            for (int i = 0; i < this->total_ks44; ++i) {
+                if (this->in_room_ks44[i]) {
+                    this->in_room_ks44[i] = false;
+                    this->present_ks44--;
+                    this->occupancy--;
+                    exited_count++;
+                }
+            }
+            
+            std::cout << "    Вышло студентов после занятия: " << exited_count << "\n";
+            std::cout << std::string(60, '=') << "\n";
+
+            this->class_in_session = false;
+            this->current_group = 0;
+
+            // Сбросить флаги посещений для следующего занятия
+            for (int i = 0; i < this->total_ks40; ++i) this->attended_this_session_ks40[i] = false;
+            for (int i = 0; i < this->total_ks44; ++i) this->attended_this_session_ks44[i] = false;
+
+            lock.unlock();
+            this->cv.notify_all();
+        }
+    }).detach();
+}
 
   
 

@@ -36,6 +36,67 @@ bool ComputerRoom::can_start_class(int group) {
     if (group == 2) return present_ks44 >= need_ks44;
     return false;
 }
+
+/**
+ * @brief Запускает занятие для указанной группы, выгоняет студентов другой, отмечает посещения.
+ * 
+ * @param group Номер группы (1 - КС-40, 2 - КС-44)
+ */
+void ComputerRoom::start_class_locked(int group) {
+    if (class_in_session || stop_flag) return;
+
+    class_in_session = true;
+    current_group = group;
+
+    std::cout << "\n" << std::string(60, '=') << "\n";
+    std::cout << "Началось занятие для группы " << (group == 1 ? "КС-40" : "КС-44") << "\n";
+    std::cout << "Статистика в начале занятия:\n";
+    std::cout << "    В классе: " << occupancy << " студентов\n";
+    std::cout << "    КС-40: " << present_ks40 << " студентов\n";
+    std::cout << "    КС-44: " << present_ks44 << " студентов\n";
+    std::cout << std::string(60, '=') << "\n";
+
+    // Выгнать всех студентов другой группы
+    if (group == 1) {
+        for (int i = 0; i < total_ks44; ++i) {
+            if (in_room_ks44[i]) {
+                in_room_ks44[i] = false;
+                present_ks44--;
+                occupancy--;
+                std::cout << "    Выгнан студент КС-44 №" << i << " (занятие для КС-40)\n";
+            }
+            attended_this_session_ks44[i] = false;
+        }
+        // Засчитать посещения студентам КС-40, находящимся в классе
+        for (int i = 0; i < total_ks40; ++i) {
+            if (in_room_ks40[i] && !attended_this_session_ks40[i]) {
+                visits_ks40[i]++;
+                attended_this_session_ks40[i] = true;
+                std::cout << "    Посещение засчитано: КС-40 студент №" << i 
+                          << " (всего: " << visits_ks40[i] << " посещений)\n";
+            }
+        }
+    }
+    else {
+        for (int i = 0; i < total_ks40; ++i) {
+            if (in_room_ks40[i]) {
+                in_room_ks40[i] = false;
+                present_ks40--;
+                occupancy--;
+                std::cout << "   👋 Выгнан студент КС-40 №" << i << " (занятие для КС-44)\n";
+            }
+            attended_this_session_ks40[i] = false;
+        }
+        for (int i = 0; i < total_ks44; ++i) {
+            if (in_room_ks44[i] && !attended_this_session_ks44[i]) {
+                visits_ks44[i]++;
+                attended_this_session_ks44[i] = true;
+                std::cout << "   ✅ Посещение засчитано: КС-44 студент №" << i 
+                          << " (всего: " << visits_ks44[i] << " посещений)\n";
+            }
+        }
+    }
+
   
 
 void ComputerRoom::stop() {

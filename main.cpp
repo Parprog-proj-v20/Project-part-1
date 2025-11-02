@@ -1,9 +1,9 @@
-#include <locale.h>
 #include <iostream>
 #include <thread>
 #include <vector>
 #include <chrono>
 #include "computer_room.h"
+#include <windows.h>
 
 /**
  * @brief Главная функция программы
@@ -13,8 +13,8 @@
  * @return 0 при успешном завершении программы
  */
 int main() {
-    setlocale(LC_ALL, "Russian");
-
+    SetConsoleOutputCP(65001);
+    SetConsoleCP(65001);
     std::cout << "Запуск симуляции компьютерного класса\n\n";
     std::cout << "• Группа КС-40: 30 студентов (требуется 15 для начала)\n";
     std::cout << "• Группа КС-44: 24 студента (требуется 12 для начала)\n";

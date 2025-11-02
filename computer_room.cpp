@@ -145,7 +145,6 @@ void ComputerRoom::start_class_locked(int group) {
     }).detach();
 }
 
-  
 
 void ComputerRoom::stop() {
     stop_flag = true;
@@ -195,8 +194,8 @@ void ComputerRoom::student_behavior(int group, int student_id) {
                         present_ks44++; 
                     }
 
-                    std::cout << "Студент " << student_id << " из группы " << (group == 1 ? "КС-40" : "КС-44")
-                        << " вошел (occupancy=" << occupancy << ", КС-40=" << present_ks40 << ", КС-44=" << present_ks44 << ")\n";
+                    std::cout << group_name << ": студент №" << student_id << " вошёл\n";
+                    std::cout << "[Всего в классе: " << occupancy << ", КС-40: " << present_ks40  << ", КС-44: " << present_ks44 << "]\n";
 
                     // Проверка для начала занятия
                     if (!class_in_session && can_start_class(group)) {
@@ -214,8 +213,7 @@ void ComputerRoom::student_behavior(int group, int student_id) {
                             visits_ks44[student_id]++; 
                             attended_this_session_ks44[student_id] = true; 
                         }
-                        std::cout << "  (засчитано посещение для студента " << student_id << ", всего="
-                            << (group == 1 ? visits_ks40[student_id] : visits_ks44[student_id]) << ")\n";
+                        std::cout << group_name << " студент №" << student_id << " получил посещение (всего: " << (group == 1 ? visits_ks40[student_id] : visits_ks44[student_id]) << ")\n";
                     }
 
                     // Если занятие группы студента уже идет, то ожидаем окончания, и после окончания выходим
@@ -243,8 +241,7 @@ void ComputerRoom::student_behavior(int group, int student_id) {
                                 present_ks44--;
                                 occupancy--;
                             }
-                            std::cout << "Студент " << student_id << " из " << (group == 1 ? "КС-40" : "КС-44")
-                                << " не дождался начала (S=" << S << "s) — ушёл на 1s и вернётся\n";
+                            std::cout << group_name << " студент №" << student_id << " не дождался начала (ждал " << S << "с) → ушёл на 1с\n";
                             
                             // уведомление для других студенотов, что места в классе еще есть
                             lock.unlock();
@@ -301,5 +298,42 @@ bool ComputerRoom::all_students_completed() {
     for (int v : visits_ks40) if (v < 2) return false;
     for (int v : visits_ks44) if (v < 2) return false;
     return true;
+}
+
+/**
+ * @brief Выводит  статистику посещений
+ */
+void ComputerRoom::print_statistics() {
+    std::lock_guard<std::mutex> lock(mtx);
+    
+    std::cout << "\n" << std::string(70, '=') << "\n";
+    std::cout << "Итоговая статистика посещений\n";
+    std::cout << std::string(70, '=') << "\n";
+    
+    std::cout << "\nГруппа КС-40 (30 студентов):\n";
+    std::cout << std::string(40, '-') << "\n";
+    for (int i = 0; i < total_ks40; ++i) {
+        std::cout << "   Студент " << std::setw(2) << i << ": " << visits_ks40[i] << " посещений";
+        if (visits_ks40[i] >= 2) {
+            std::cout << "    (норма выполнена)";
+        } else {
+            std::cout << "     (необходимо " << (2 - visits_ks40[i]) << " ещё)";
+        }
+        std::cout << "\n";
+    }
+    
+    std::cout << "\nГруппа КС-44 (24 студента):\n";
+    std::cout << std::string(40, '-') << "\n";
+    for (int i = 0; i < total_ks44; ++i) {
+        std::cout << "   Студент " << std::setw(2) << i << ": " << visits_ks44[i] << " посещений";
+        if (visits_ks44[i] >= 2) {
+            std::cout << "    (норма выполнена)";
+        } else {
+            std::cout << "    (необходимо " << (2 - visits_ks44[i]) << " ещё)";
+        }
+        std::cout << "\n";
+    }
+    
+    std::cout << std::string(70, '=') << "\n";
 }
 

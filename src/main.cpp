@@ -15,17 +15,17 @@
 int main() {
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
-    std::cout << "Запуск симуляции компьютерного класса\n\n";
-    std::cout << "• Группа КС-40: 30 студентов (требуется 15 для начала)\n";
-    std::cout << "• Группа КС-44: 24 студента (требуется 12 для начала)\n";
-    std::cout << "• Вместимость класса: 20 студентов\n";
-    std::cout << "• Цель: каждому студенту посетить 2 занятия\n\n\n";
+    std::cout << std::string(60, '*') << "\n\n";
+    std::cout << "> Группа КС-40: 30 студентов (требуется 15 для начала)\n";
+    std::cout << "> Группа КС-44: 24 студента (требуется 12 для начала)\n";
+    std::cout << "> Вместимость класса: 20 студентов\n\n";
+    std::cout << std::string(60, '*') << "\n\n";
 
     ComputerRoom room;
     std::vector<std::thread> threads;
 
     // Создание потоков для группы КС-40
-    std::cout << "Запуск потоков для группы КС-40  \n";
+    std::cout << "\t! Запуск потоков для группы КС-40\n";
     for (int i = 0; i < 30; ++i) {
         threads.emplace_back([&room, i]() {
             room.student_behavior(1, i);
@@ -33,15 +33,12 @@ int main() {
     }
 
     // Создание потоков для группы КС-44
-    std::cout << "Запуск потоков для группы КС-44  \n";
+    std::cout << "\t! Запуск потоков для группы КС-44\n";
     for (int i = 0; i < 24; ++i) {
         threads.emplace_back([&room, i]() {
             room.student_behavior(2, i);
         });
     }
-
-    std::cout << "\nОжидание завершения всех посещений...\n";
-    std::cout << "   (максимальное время ожидания: 200 секунд)\n\n";
 
     // Ожидание завершения всех посещений с таймаутом
     auto start = std::chrono::steady_clock::now();
@@ -51,18 +48,20 @@ int main() {
         auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(current_time - start).count();
         
         if (elapsed >= 200) {
-            std::cout << "\nДостигнут таймаут ожидания (200 секунд). Принудительная остановка.\n";
+            std::cout << "\n! Достигнут таймаут ожидания (200 секунд).\n";
             break;
         }
         
         // Вывод прогресса каждые 5 секунд
         if (elapsed % 5 == 0 && elapsed > 0) {
-            std::cout << "   Прошло " << elapsed << " секунд...\n";
+            std::cout << std::string(60, '-') << "\n";
+            std::cout << "\t! Время работы программы: " << elapsed << " секунд\n";
+            std::cout << std::string(60, '-') << "\n";
         }
     }
 
     // Остановка всех потоков
-    std::cout << "\nЗавершение работы всех потоков...\n";
+    std::cout << "\n\t! Завершение работы всех потоков\n\n";
     room.stop();
 
     // Ожидание завершения всех потоков
@@ -72,7 +71,5 @@ int main() {
 
     // Вывод статистики
     room.print_statistics();
-
-    std::cout << "\nПрограмма успешно завершена\n";
     return 0;
 }

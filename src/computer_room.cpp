@@ -51,13 +51,13 @@ void ComputerRoom::start_class_locked(int group) {
     class_in_session = true;
     current_group = group;
 
-    std::cout << "\n" << std::string(60, '=') << "\n";
-    std::cout << "Началось занятие для группы " << (group == 1 ? "КС-40" : "КС-44") << "\n";
-    std::cout << "Статистика в начале занятия:\n";
-    std::cout << "    В классе: " << occupancy << " студентов\n";
-    std::cout << "    КС-40: " << present_ks40 << " студентов\n";
-    std::cout << "    КС-44: " << present_ks44 << " студентов\n";
-    std::cout << std::string(60, '=') << "\n";
+    std::cout << "\n" << std::string(60, '*') << "\n";
+    std::cout << "\t! Началось занятие для группы " << (group == 1 ? "КС-40" : "КС-44") << "\n";
+    std::cout << "\tСтатистика на начало занятия:\n";
+    std::cout << "\tВ классе: " << occupancy << " студентов\n";
+    std::cout << "\t\tКС-40: " << present_ks40 << " студентов\n";
+    std::cout << "\t\tКС-44: " << present_ks44 << " студентов\n";
+    std::cout << std::string(60, '*') << "\n";
 
     // Выгнать всех студентов другой группы
     if (group == 1) {
@@ -66,7 +66,7 @@ void ComputerRoom::start_class_locked(int group) {
                 in_room_ks44[i] = false;
                 present_ks44--;
                 occupancy--;
-                std::cout << "    Выгнан студент КС-44 №" << i << " (занятие для КС-40)\n";
+                std::cout << "\tВыгнан студент КС-44 " << i << "\n";
             }
             attended_this_session_ks44[i] = false;
         }
@@ -75,8 +75,8 @@ void ComputerRoom::start_class_locked(int group) {
             if (in_room_ks40[i] && !attended_this_session_ks40[i]) {
                 visits_ks40[i]++;
                 attended_this_session_ks40[i] = true;
-                std::cout << "    Посещение засчитано: КС-40 студент №" << i 
-                          << " (всего: " << visits_ks40[i] << " посещений)\n";
+                std::cout << "\tПосещение засчитано для: КС-40, студент " << i 
+                          << "; всего посещений: " << visits_ks40[i] << "\n";
             }
         }
     }
@@ -86,7 +86,7 @@ void ComputerRoom::start_class_locked(int group) {
                 in_room_ks40[i] = false;
                 present_ks40--;
                 occupancy--;
-                std::cout << "    Выгнан студент КС-40 №" << i << " (занятие для КС-44)\n";
+                std::cout << "\tВыгнан студент КС-40 " << i << "\n";
             }
             attended_this_session_ks40[i] = false;
         }
@@ -94,8 +94,8 @@ void ComputerRoom::start_class_locked(int group) {
             if (in_room_ks44[i] && !attended_this_session_ks44[i]) {
                 visits_ks44[i]++;
                 attended_this_session_ks44[i] = true;
-                std::cout << "    Посещение засчитано: КС-44 студент №" << i 
-                          << " (всего: " << visits_ks44[i] << " посещений)\n";
+                std::cout << "\tПосещение засчитано для: КС-44, студент " << i 
+                          << "; всего посещений: " << visits_ks44[i] << "\n";
             }
         }
     }
@@ -110,7 +110,7 @@ void ComputerRoom::start_class_locked(int group) {
             std::unique_lock<std::mutex> lock(this->mtx);
             if (!this->class_in_session) return;
             
-            std::cout << "\n" << std::string(60, '=') << "\n";
+            std::cout << "\n" << std::string(60, '*') << "\n";
             std::cout << "Завершение занятия для группы " << (this->current_group == 1 ? "КС-40" : "КС-44") << "\n";
             
             // Преподаватель выводит всех оставшихся студентов
@@ -132,8 +132,8 @@ void ComputerRoom::start_class_locked(int group) {
                 }
             }
             
-            std::cout << "    Вышло студентов после занятия: " << exited_count << "\n";
-            std::cout << std::string(60, '=') << "\n";
+            std::cout << "\tВышло студентов после занятия: " << exited_count << "\n";
+            std::cout << std::string(60, '*') << "\n";
 
             this->class_in_session = false;
             this->current_group = 0;
@@ -197,8 +197,8 @@ void ComputerRoom::student_behavior(int group, int student_id) {
                         present_ks44++; 
                     }
 
-                    std::cout << group_name << ": студент №" << student_id << " вошёл\n";
-                    std::cout << "[Всего в классе: " << occupancy << ", КС-40: " << present_ks40  << ", КС-44: " << present_ks44 << "]\n";
+                    std::cout << group_name << ": студент " << student_id << " вошёл\n";
+                    std::cout << "\t> Всего в классе: " << occupancy << ", КС-40: " << present_ks40  << ", КС-44: " << present_ks44 << "\n";
 
                     // Проверка для начала занятия
                     if (!class_in_session && can_start_class(group)) {
@@ -216,7 +216,8 @@ void ComputerRoom::student_behavior(int group, int student_id) {
                             visits_ks44[student_id]++; 
                             attended_this_session_ks44[student_id] = true; 
                         }
-                        std::cout << group_name << " студент №" << student_id << " получил посещение (всего: " << (group == 1 ? visits_ks40[student_id] : visits_ks44[student_id]) << ")\n";
+                        std::cout << group_name << " студент " << student_id << " получил посещение (всего посещений: " 
+                            << (group == 1 ? visits_ks40[student_id] : visits_ks44[student_id]) << ")\n";
                     }
 
                     // Если занятие группы студента уже идет, то ожидаем окончания, и после окончания выходим
@@ -244,7 +245,7 @@ void ComputerRoom::student_behavior(int group, int student_id) {
                                 present_ks44--;
                                 occupancy--;
                             }
-                            std::cout << group_name << " студент №" << student_id << " не дождался начала (ждал " << S << "с) → ушёл на 1с\n";
+                            std::cout << group_name << ": студент " << student_id << " ждал " << S << " сек, не дождался и вышел на 1 сек\n";
                             
                             // уведомление для других студенотов, что места в классе еще есть
                             lock.unlock();
@@ -271,8 +272,8 @@ void ComputerRoom::student_behavior(int group, int student_id) {
                                     present_ks44--;
                                     occupancy--;
                                 }
-                                std::cout << "Студент " << student_id << " из " << (group == 1 ? "КС-40" : "КС-44")
-                                    << " был выгнан при старте занятия другой группы\n";
+                                std::cout << "\tСтудент " << student_id << " из " << (group == 1 ? "КС-40" : "КС-44")
+                                    << " попытался войти во время занятия другой группы и был выгнан\n";
                                 
                                 // уведомляемЮ что состояние изменилось
                                 lock.unlock();
@@ -309,31 +310,20 @@ bool ComputerRoom::all_students_completed() {
 void ComputerRoom::print_statistics() {
     std::lock_guard<std::mutex> lock(mtx);
     
-    std::cout << "Итоговая статистика посещений\n\n";
-    
-    std::cout << "\nГруппа КС-40 (30 студентов):\n";
+    std::cout << std::string(60, '*') << "\n";
+    std::cout << "\tИТОГОВАЯ СТАТИСТИКА\n";
+    std::cout << std::string(60, '*') << "\n";
+    std::cout << "Группа КС-40 (30 студентов):\n";
     for (int i = 0; i < total_ks40; ++i) {
-        std::cout << "   Студент " << std::setw(2) << i << ": " << visits_ks40[i] << " посещений";
-        if (visits_ks40[i] >= 2) {
-            std::cout << "    (норма выполнена)";
-        } else {
-            std::cout << "     (необходимо " << (2 - visits_ks40[i]) << " ещё)";
-        }
+        std::cout << "\tСтудент " << i << ": " << visits_ks40[i] << " посещений";
         std::cout << "\n";
     }
-    
-    std::cout << "\nГруппа КС-44 (24 студента):\n";
-    std::cout << std::string(40, '-') << "\n";
+    std::cout << std::string(60, '*') << "\n";
+    std::cout << "Группа КС-44 (24 студента):\n";
     for (int i = 0; i < total_ks44; ++i) {
-        std::cout << "   Студент " << std::setw(2) << i << ": " << visits_ks44[i] << " посещений";
-        if (visits_ks44[i] >= 2) {
-            std::cout << "    (норма выполнена)";
-        } else {
-            std::cout << "    (необходимо " << (2 - visits_ks44[i]) << " ещё)";
-        }
+        std::cout << "\tСтудент " << i << ": " << visits_ks44[i] << " посещений";
         std::cout << "\n";
     }
-    
-    std::cout << std::string(70, '=') << "\n";
+    std::cout << std::string(60, '*') << "\n";
 }
 

@@ -309,12 +309,9 @@ bool ComputerRoom::all_students_completed() {
 void ComputerRoom::print_statistics() {
     std::lock_guard<std::mutex> lock(mtx);
     
-    std::cout << "\n" << std::string(70, '=') << "\n";
-    std::cout << "Итоговая статистика посещений\n";
-    std::cout << std::string(70, '=') << "\n";
+    std::cout << "Итоговая статистика посещений\n\n";
     
     std::cout << "\nГруппа КС-40 (30 студентов):\n";
-    std::cout << std::string(40, '-') << "\n";
     for (int i = 0; i < total_ks40; ++i) {
         std::cout << "   Студент " << std::setw(2) << i << ": " << visits_ks40[i] << " посещений";
         if (visits_ks40[i] >= 2) {

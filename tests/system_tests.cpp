@@ -123,7 +123,7 @@ TEST_F(SystemTest, SystemBoundaryConditions) {
             if (student.joinable()) student.join();
         }
 
-        std::cout << "Тест: Система сминимальным необходимым количеством студентов работает ккорректно" << std::endl;
+        std::cout << "Тест: Система с минимальным необходимым количеством студентов работает корректно" << std::endl;
     }
 
     std::cout << "Все граничные условия обработаны корректно" << std::endl;

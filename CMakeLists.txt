@@ -40,11 +40,16 @@ if(BUILD_TESTS)
     target_include_directories(system_tests PRIVATE include)
     target_link_libraries(system_tests gtest gtest_main)
 
+    add_executable(thread_safety_tests tests/thread_safety_tests.cpp src/computer_room.cpp)
+    target_include_directories(thread_safety_tests PRIVATE include)
+    target_link_libraries(thread_safety_tests gtest gtest_main)
+
     include(GoogleTest)
     gtest_discover_tests(unit_tests)
     gtest_discover_tests(integration_tests)
     gtest_discover_tests(validation_tests)
     gtest_discover_tests(system_tests)
+    gtest_discover_tests(thread_safety_tests)
     
     message(STATUS "Tests created successfully")  
 else()

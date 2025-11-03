@@ -14,6 +14,9 @@
       <FullPath>C:\Users\user\source\repos\Project-part-1\build\Debug\system_tests.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
+      <FullPath>C:\Users\user\source\repos\Project-part-1\build\Debug\thread_safety_tests.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
       <FullPath>C:\Users\user\source\repos\Project-part-1\build\Debug\unit_tests.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>

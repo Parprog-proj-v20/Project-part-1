@@ -3,6 +3,7 @@ C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/CMakeFiles/unit_te
 C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/CMakeFiles/integration_tests.dir
 C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/CMakeFiles/validation_tests.dir
 C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/CMakeFiles/system_tests.dir
+C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/CMakeFiles/thread_safety_tests.dir
 C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/CMakeFiles/edit_cache.dir
 C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
 C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/CMakeFiles/list_install_components.dir

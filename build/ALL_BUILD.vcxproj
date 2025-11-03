@@ -202,6 +202,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{9823096B-D743-3C0E-B62C-FC9D26E0FED9}</Project>
       <Name>system_tests</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\user\source\repos\Project-part-1\build\thread_safety_tests.vcxproj">
+      <Project>{9E4B5EB8-3844-35A4-BFCA-0506DE54CCAD}</Project>
+      <Name>thread_safety_tests</Name>
+    </ProjectReference>
     <ProjectReference Include="C:\Users\user\source\repos\Project-part-1\build\unit_tests.vcxproj">
       <Project>{B9918214-CD31-3549-919A-AD7DBBAFE7A6}</Project>
       <Name>unit_tests</Name>

@@ -1,0 +1,5 @@
+if(EXISTS "C:/Users/user/source/repos/Project-part-1/build/integration_tests[1]_tests.cmake")
+  include("C:/Users/user/source/repos/Project-part-1/build/integration_tests[1]_tests.cmake")
+else()
+  add_test(integration_tests_NOT_BUILT integration_tests_NOT_BUILT)
+endif()

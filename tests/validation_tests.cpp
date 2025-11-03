@@ -1,12 +1,20 @@
-#include <gtest/gtest.h>
+п»ї#include <gtest/gtest.h>
 #include <atomic>
 #include <thread>
 #include <chrono>
-#include "../../src/computer_room.h"
+#include <vector>
+#include <iostream>
+#include <locale>
+#include <clocale>
+#include "../include/computer_room.h"
 
 class ValidationTest : public ::testing::Test {
 protected:
     void SetUp() override {
+        std::setlocale(LC_ALL, "en_US.UTF-8");
+        std::locale::global(std::locale("en_US.UTF-8"));
+        std::wcout.imbue(std::locale("en_US.UTF-8"));
+
         room = new ComputerRoom();
     }
 
@@ -21,7 +29,7 @@ protected:
 };
 
 /**
- * @brief Тест 1: Проверяет, что не выходит больше, чем входит
+ * @brief РўРµСЃС‚ 1: РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РЅРµ РІС‹С…РѕРґРёС‚ Р±РѕР»СЊС€Рµ, С‡РµРј РІС…РѕРґРёС‚
  */
 TEST_F(ValidationTest, NeverMoreExitsThanEnters) {
     const int num_students = 10;
@@ -30,7 +38,7 @@ TEST_F(ValidationTest, NeverMoreExitsThanEnters) {
     for (int i = 0; i < num_students; ++i) {
         students.emplace_back([this, i]() {
             students_entered++;
-            room->student_behavior(1, i);
+            room->student_behavior(1, i); 
             students_exited++;
             });
     }
@@ -44,33 +52,31 @@ TEST_F(ValidationTest, NeverMoreExitsThanEnters) {
     }
 
     EXPECT_LE(students_exited.load(), students_entered.load());
-    std::cout << "Вошло: " << students_entered << ", вышло: " << students_exited << std::endl;
+    std::cout << "Р’РѕС€Р»Рѕ: " << students_entered << ", РІС‹С€Р»Рѕ: " << students_exited << std::endl;
 }
 
 /**
- * @brief Тест 2: Проверяет, что система не зависает при полной загрузке
- *
- * Запускаем больше студентов, чем мест (проверка на deadlock). Также добавляем студентов из второй группы
+ * @brief РўРµСЃС‚ 2: РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ СЃРёСЃС‚РµРјР° РЅРµ Р·Р°РІРёСЃР°РµС‚ РїСЂРё РїРѕР»РЅРѕР№ Р·Р°РіСЂСѓР·РєРµ
  */
 TEST_F(ValidationTest, NoDeadlockUnderFullLoad) {
     std::vector<std::thread> students;
 
     for (int i = 0; i < 40; ++i) {
         students.emplace_back([this, i]() {
-            room.student_behavior(1, i % 20);
+            room->student_behavior(1, i % 20);
             });
     }
     for (int i = 0; i < 30; ++i) {
         students.emplace_back([this, i]() {
-            room.student_behavior(2, i % 15);
+            room->student_behavior(2, i % 15); 
             });
     }
 
     std::this_thread::sleep_for(std::chrono::seconds(10));
-    room.stop();
+    room->stop();
 
     for (auto& student : students) {
-        EXPECT_TRUE(student.joinable()) << "Поток не joinable - возможен deadlock";
+        EXPECT_TRUE(student.joinable()) << "РџРѕС‚РѕРє РЅРµ joinable - РІРѕР·РјРѕР¶РµРЅ deadlock";
         if (student.joinable()) {
             student.join();
         }
@@ -80,33 +86,30 @@ TEST_F(ValidationTest, NoDeadlockUnderFullLoad) {
 }
 
 /**
- * @brief Тест 3: Проверяет, что поведение системы корректно при конкуренции групп
- *
- * Запускаем равное количество студентов из обеих групп
+ * @brief РўРµСЃС‚ 3: РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РїРѕРІРµРґРµРЅРёРµ СЃРёСЃС‚РµРјС‹ РєРѕСЂСЂРµРєС‚РЅРѕ РїСЂРё РєРѕРЅРєСѓСЂРµРЅС†РёРё РіСЂСѓРїРї
  */
 TEST_F(ValidationTest, GroupCompetitionHandledCorrectly) {
     std::vector<std::thread> students;
 
     for (int i = 0; i < 15; ++i) {
         students.emplace_back([this, i]() {
-            room.student_behavior(1, i); 
+            room->student_behavior(1, i);  
             });
     }
     for (int i = 0; i < 12; ++i) {
         students.emplace_back([this, i]() {
-            room.student_behavior(2, i);
+            room->student_behavior(2, i);
             });
     }
 
     std::this_thread::sleep_for(std::chrono::seconds(8));
+    room->stop(); 
 
-    room.stop();
     for (auto& student : students) {
         if (student.joinable()) student.join();
     }
 
     EXPECT_NO_THROW({
-        room.print_statistics();
+        room->print_statistics();
         });
 }
-

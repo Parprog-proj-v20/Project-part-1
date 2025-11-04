@@ -4,7 +4,9 @@
 #include <thread>
 #include <chrono>
 #include <iomanip>
+#ifdef _WIN32 // Подключение библиотеки windows.h только при компиляции на Windows
 #include <windows.h>
+#endif
 
 ComputerRoom::ComputerRoom()
     : visits_ks40(total_ks40, 0),
@@ -44,8 +46,10 @@ bool ComputerRoom::can_start_class(int group) {
  * @param group Номер группы (1 - КС-40, 2 - КС-44)
  */
 void ComputerRoom::start_class_locked(int group) {
+    #ifdef _WIN32
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
+    #endif
     if (class_in_session || stop_flag) return;
 
     class_in_session = true;

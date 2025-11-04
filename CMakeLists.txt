@@ -16,6 +16,7 @@ if(MSVC)
 endif()
 
 option(BUILD_TESTS "Build tests" ON)
+enable_testing()
 
 if(BUILD_TESTS)
     include(FetchContent)

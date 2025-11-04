@@ -6,7 +6,7 @@
 #include <iostream>
 #include <locale>
 #include <clocale>
-#include "../include/computer_room.h"
+#include "../include/computerRoom.h"
 
 class SystemTest : public ::testing::Test {
 protected:
@@ -25,16 +25,16 @@ TEST_F(SystemTest, CompleteSystemSimulationUntilCompletion) {
     ComputerRoom room;
     std::vector<std::thread> students;
 
-    std::cout << "=== СИСТЕМНЫЙ ТЕСТ: Полная симуляция ===" << std::endl;
+    std::cout << "\tСИСТЕМНЫЙ ТЕСТ: Полная симуляция" << std::endl;
 
     for (int i = 0; i < 30; ++i) {
         students.emplace_back([&room, i]() {
-            room.student_behavior(1, i);
+            room.studentBehavior(1, i);
             });
     }
     for (int i = 0; i < 24; ++i) {
         students.emplace_back([&room, i]() {
-            room.student_behavior(2, i);
+            room.studentBehavior(2, i);
             });
     }
 
@@ -49,7 +49,7 @@ TEST_F(SystemTest, CompleteSystemSimulationUntilCompletion) {
 
         if (elapsed.count() >= check_count * 10) {
             std::cout << "Прошло " << elapsed.count() << " секунд. ";
-            if (room.all_students_completed()) {
+            if (room.allStudentsCompleted()) {
                 std::cout << "ВСЕ студенты завершили!" << std::endl;
                 break;
             }
@@ -72,9 +72,9 @@ TEST_F(SystemTest, CompleteSystemSimulationUntilCompletion) {
         if (student.joinable()) student.join();
     }
 
-    room.print_statistics();
+    room.printStatistics();
 
-    EXPECT_TRUE(room.all_students_completed()) << "Система не достигла конечного состояния";
+    EXPECT_TRUE(room.allStudentsCompleted()) << "Система не достигла конечного состояния";
 }
 
 /**
@@ -90,14 +90,14 @@ TEST_F(SystemTest, SystemBoundaryConditions) {
         std::cout << "Тест: Пустая система" << std::endl;
         EXPECT_NO_THROW({
             room.stop();
-            room.print_statistics();
+            room.printStatistics();
             });
     }
 
     {
         ComputerRoom room;
         std::thread single_student([&room]() {
-            room.student_behavior(1, 0);
+            room.studentBehavior(1, 0);
             });
 
         std::this_thread::sleep_for(std::chrono::seconds(5));
@@ -113,7 +113,7 @@ TEST_F(SystemTest, SystemBoundaryConditions) {
 
         for (int i = 0; i < 15; ++i) {
             students.emplace_back([&room, i]() {
-                room.student_behavior(1, i);
+                room.studentBehavior(1, i);
                 });
         }
 

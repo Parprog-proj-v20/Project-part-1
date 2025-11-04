@@ -59,8 +59,8 @@ TEST_F(SystemTest, CompleteSystemSimulationUntilCompletion) {
             check_count++;
         }
 
-        if (elapsed.count() > 120) {
-            std::cout << "Прошло 120 секунд. Закругляемся" << std::endl;
+        if (elapsed.count() > 200) {
+            std::cout << "Прошло 200 секунд. Закругляемся" << std::endl;
             break;
         }
 

@@ -2,7 +2,7 @@
 #include <thread>
 #include <vector>
 #include <chrono>
-#include "computer_room.h"
+#include "computerRoom.h"
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -32,7 +32,7 @@ int main() {
     std::cout << "\t! Запуск потоков для группы КС-40\n";
     for (int i = 0; i < 30; ++i) {
         threads.emplace_back([&room, i]() {
-            room.student_behavior(1, i);
+            room.studentBehavior(1, i);
         });
     }
 
@@ -40,13 +40,13 @@ int main() {
     std::cout << "\t! Запуск потоков для группы КС-44\n";
     for (int i = 0; i < 24; ++i) {
         threads.emplace_back([&room, i]() {
-            room.student_behavior(2, i);
+            room.studentBehavior(2, i);
         });
     }
 
     // Ожидание завершения всех посещений с таймаутом
     auto start = std::chrono::steady_clock::now();
-    while (!room.all_students_completed()) {
+    while (!room.allStudentsCompleted()) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
         auto current_time = std::chrono::steady_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(current_time - start).count();
@@ -74,6 +74,6 @@ int main() {
     }
 
     // Вывод статистики
-    room.print_statistics();
+    room.printStatistics();
     return 0;
 }

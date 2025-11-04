@@ -6,7 +6,7 @@
 #include <iostream>
 #include <locale>
 #include <clocale>
-#include "../include/computer_room.h"
+#include "../include/computerRoom.h"
 
 class ValidationTest : public ::testing::Test {
 protected:
@@ -38,7 +38,7 @@ TEST_F(ValidationTest, NeverMoreExitsThanEnters) {
     for (int i = 0; i < num_students; ++i) {
         students.emplace_back([this, i]() {
             students_entered++;
-            room->student_behavior(1, i); 
+            room->studentBehavior(1, i); 
             students_exited++;
             });
     }
@@ -63,12 +63,12 @@ TEST_F(ValidationTest, NoDeadlockUnderFullLoad) {
 
     for (int i = 0; i < 40; ++i) {
         students.emplace_back([this, i]() {
-            room->student_behavior(1, i % 20);
+            room->studentBehavior(1, i % 20);
             });
     }
     for (int i = 0; i < 30; ++i) {
         students.emplace_back([this, i]() {
-            room->student_behavior(2, i % 15); 
+            room->studentBehavior(2, i % 15); 
             });
     }
 
@@ -93,12 +93,12 @@ TEST_F(ValidationTest, GroupCompetitionHandledCorrectly) {
 
     for (int i = 0; i < 15; ++i) {
         students.emplace_back([this, i]() {
-            room->student_behavior(1, i);  
+            room->studentBehavior(1, i);  
             });
     }
     for (int i = 0; i < 12; ++i) {
         students.emplace_back([this, i]() {
-            room->student_behavior(2, i);
+            room->studentBehavior(2, i);
             });
     }
 
@@ -110,6 +110,6 @@ TEST_F(ValidationTest, GroupCompetitionHandledCorrectly) {
     }
 
     EXPECT_NO_THROW({
-        room->print_statistics();
+        room->printStatistics();
         });
 }

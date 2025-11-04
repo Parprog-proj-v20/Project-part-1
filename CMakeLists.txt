@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 3.13)
 project(Project-part-1)
+
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Project-part-1 src/main.cpp src/computer_room.cpp)
+add_executable(Project-part-1
+    src/main.cpp
+    src/computer_room.cpp
+)
+
 target_include_directories(Project-part-1 PRIVATE include)
 
 if(MSVC)
@@ -24,25 +29,17 @@ if(BUILD_TESTS)
     FetchContent_MakeAvailable(googletest)
     message(STATUS "GTest loaded, creating tests")
     
-    add_executable(unit_tests tests/unit_tests.cpp src/computer_room.cpp)
-    target_include_directories(unit_tests PRIVATE include)
-    target_link_libraries(unit_tests gtest gtest_main)
+    function(add_test_executable test_name)
+        add_executable(${test_name} ${ARGN})
+        target_include_directories(${test_name} PRIVATE include)
+        target_link_libraries(${test_name} PRIVATE gtest gtest_main)
+    endfunction()
 
-    add_executable(integration_tests tests/integration_tests.cpp src/computer_room.cpp)
-    target_include_directories(integration_tests PRIVATE include)
-    target_link_libraries(integration_tests gtest gtest_main)
-
-    add_executable(validation_tests tests/validation_tests.cpp src/computer_room.cpp)
-    target_include_directories(validation_tests PRIVATE include)
-    target_link_libraries(validation_tests gtest gtest_main)
-    
-    add_executable(system_tests tests/system_tests.cpp src/computer_room.cpp)
-    target_include_directories(system_tests PRIVATE include)
-    target_link_libraries(system_tests gtest gtest_main)
-
-    add_executable(thread_safety_tests tests/thread_safety_tests.cpp src/computer_room.cpp)
-    target_include_directories(thread_safety_tests PRIVATE include)
-    target_link_libraries(thread_safety_tests gtest gtest_main)
+    add_test_executable(unit_tests tests/unit_tests.cpp src/computer_room.cpp)
+    add_test_executable(integration_tests tests/integration_tests.cpp src/computer_room.cpp)
+    add_test_executable(validation_tests tests/validation_tests.cpp src/computer_room.cpp)
+    add_test_executable(system_tests tests/system_tests.cpp src/computer_room.cpp)
+    add_test_executable(thread_safety_tests tests/thread_safety_tests.cpp src/computer_room.cpp)
 
     include(GoogleTest)
     gtest_discover_tests(unit_tests)

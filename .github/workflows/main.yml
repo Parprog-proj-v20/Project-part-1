@@ -1,14 +1,10 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ "main", "devops" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "devops" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -24,13 +20,16 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      
+      - name: Build
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON
+          cmake --build build
+
+      - name: Run Main
+        run: ./build/Project-part-1
+          
+      - name: Run Tests
+        run: |
+          cd build
+          ctest --output-on-failure --verbose

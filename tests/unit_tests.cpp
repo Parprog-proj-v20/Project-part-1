@@ -1,7 +1,7 @@
 ﻿#include <gtest/gtest.h>
 #include <locale>
 #include <clocale>
-#include "../include/computer_room.h"
+#include "../include/computerRoom.h"
 
 class UnitTest : public ::testing::Test {
 protected:
@@ -16,10 +16,10 @@ protected:
 /**
  * @brief Тест 1: Проверка начального состояния
  *
- * Тестируем метод all_students_completed изолированно
+ * Тестируем метод allStudentsCompleted изолированно
  */
 TEST_F(UnitTest, InitialStateNoOneCompleted) {
-    EXPECT_FALSE(room.all_students_completed());
+    EXPECT_FALSE(room.allStudentsCompleted());
 }
 
 /**
@@ -27,9 +27,9 @@ TEST_F(UnitTest, InitialStateNoOneCompleted) {
  */
 TEST_F(UnitTest, MultipleStatisticsCalls) {
     EXPECT_NO_THROW({
-        room.print_statistics();
-        room.print_statistics();
-        room.print_statistics();
+        room.printStatistics();
+        room.printStatistics();
+        room.printStatistics();
         });
 }
 

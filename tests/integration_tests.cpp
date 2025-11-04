@@ -3,7 +3,7 @@
 #include <chrono>
 #include <locale>
 #include <clocale>
-#include "../include/computer_room.h"
+#include "../include/computerRoom.h"
 
 class IntegrationTest : public ::testing::Test {
 protected:
@@ -21,7 +21,7 @@ protected:
  */
 TEST_F(IntegrationTest, StatisticsAfterStudentActivity) {
     std::thread student([this]() {
-        room.student_behavior(1, 0);
+        room.studentBehavior(1, 0);
         });
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -29,7 +29,7 @@ TEST_F(IntegrationTest, StatisticsAfterStudentActivity) {
     student.join();
 
     EXPECT_NO_THROW({
-        room.print_statistics();
+        room.printStatistics();
         });
 }
 
@@ -43,7 +43,7 @@ TEST_F(IntegrationTest, ClassStartsWhenEnoughStudents) {
 
     for (int i = 0; i < 15; ++i) {
         students.emplace_back([this, i]() {
-            room.student_behavior(1, i);
+            room.studentBehavior(1, i);
             });
     }
 
@@ -67,7 +67,7 @@ TEST_F(IntegrationTest, GroupsWorkAtDifferentTimes) {
 
     for (int i = 0; i < 15; ++i) {
         students.emplace_back([this, i]() {
-            room.student_behavior(1, i);
+            room.studentBehavior(1, i);
             });
     }
 
@@ -75,7 +75,7 @@ TEST_F(IntegrationTest, GroupsWorkAtDifferentTimes) {
 
     for (int i = 0; i < 12; ++i) {
         students.emplace_back([this, i]() {
-            room.student_behavior(2, i);
+            room.studentBehavior(2, i);
             });
     }
 
@@ -97,7 +97,7 @@ TEST_F(IntegrationTest, GracefulShutdownDuringActiveClass) {
 
     for (int i = 0; i < 20; ++i) {
         students.emplace_back([this, i]() {
-            room.student_behavior(1, i % 15);
+            room.studentBehavior(1, i % 15);
             });
     }
 
@@ -122,7 +122,7 @@ TEST_F(IntegrationTest, StudentsGetEvictedWhenOtherGroupStartsClass) {
 
     for (int i = 0; i < 5; ++i) {
         students.emplace_back([this, i]() {
-            room.student_behavior(2, i);
+            room.studentBehavior(2, i);
             });
     }
 
@@ -130,7 +130,7 @@ TEST_F(IntegrationTest, StudentsGetEvictedWhenOtherGroupStartsClass) {
 
     for (int i = 0; i < 15; ++i) {
         students.emplace_back([this, i]() {
-            room.student_behavior(1, i);
+            room.studentBehavior(1, i);
             });
     }
 

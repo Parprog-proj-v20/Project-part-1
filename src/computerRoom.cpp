@@ -1,18 +1,20 @@
-#include "../include/computer_room.h"
+#include "../include/computerRoom.h"
 #include <iostream>
 #include <random>
 #include <thread>
 #include <chrono>
 #include <iomanip>
+#ifdef _WIN32 // Подключение библиотеки windows.h только при компиляции на Windows
 #include <windows.h>
+#endif
 
 ComputerRoom::ComputerRoom()
-    : visits_ks40(total_ks40, 0),
-      visits_ks44(total_ks44, 0),
-      in_room_ks40(total_ks40, false),
-      in_room_ks44(total_ks44, false),
-      attended_this_session_ks40(total_ks40, false),
-      attended_this_session_ks44(total_ks44, false) {
+    : visits_ks40(TOTAL_KS40, 0),
+      visits_ks44(TOTAL_KS44, 0),
+      in_room_ks40(TOTAL_KS40, false),
+      in_room_ks44(TOTAL_KS44, false),
+      attended_this_session_ks40(TOTAL_KS40, false),
+      attended_this_session_ks44(TOTAL_KS44, false) {
 }
 
 /**
@@ -20,7 +22,7 @@ ComputerRoom::ComputerRoom()
  * 
  * @return Случайное число от 1 до 2 секунд
  */
-int ComputerRoom::get_random_time() {
+int ComputerRoom::getRandomTime() {
     static thread_local std::mt19937 gen(std::random_device{}());
     std::uniform_int_distribution<> dis(1, 2);
     return dis(gen);
@@ -32,9 +34,9 @@ int ComputerRoom::get_random_time() {
  * @param group Номер группы (1 - КС-40, 2 - КС-44)
  * @return true если набралось достаточно студентов для начала занятия, false в обратном случае
  */
-bool ComputerRoom::can_start_class(int group) {
-    if (group == 1) return present_ks40 >= need_ks40;
-    if (group == 2) return present_ks44 >= need_ks44;
+bool ComputerRoom::canStartClass(int group) {
+    if (group == 1) return present_ks40 >= NEED_KS40;
+    if (group == 2) return present_ks44 >= NEED_KS44;
     return false;
 }
 
@@ -43,9 +45,11 @@ bool ComputerRoom::can_start_class(int group) {
  * 
  * @param group Номер группы (1 - КС-40, 2 - КС-44)
  */
-void ComputerRoom::start_class_locked(int group) {
+void ComputerRoom::startClassLocked(int group) {
+    #ifdef _WIN32
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
+    #endif
     if (class_in_session || stop_flag) return;
 
     class_in_session = true;
@@ -61,7 +65,7 @@ void ComputerRoom::start_class_locked(int group) {
 
     // Выгнать всех студентов другой группы
     if (group == 1) {
-        for (int i = 0; i < total_ks44; ++i) {
+        for (int i = 0; i < TOTAL_KS44; ++i) {
             if (in_room_ks44[i]) {
                 in_room_ks44[i] = false;
                 present_ks44--;
@@ -71,7 +75,7 @@ void ComputerRoom::start_class_locked(int group) {
             attended_this_session_ks44[i] = false;
         }
         // Засчитать посещения студентам КС-40, находящимся в классе
-        for (int i = 0; i < total_ks40; ++i) {
+        for (int i = 0; i < TOTAL_KS40; ++i) {
             if (in_room_ks40[i] && !attended_this_session_ks40[i]) {
                 visits_ks40[i]++;
                 attended_this_session_ks40[i] = true;
@@ -81,7 +85,7 @@ void ComputerRoom::start_class_locked(int group) {
         }
     }
     else {
-        for (int i = 0; i < total_ks40; ++i) {
+        for (int i = 0; i < TOTAL_KS40; ++i) {
             if (in_room_ks40[i]) {
                 in_room_ks40[i] = false;
                 present_ks40--;
@@ -90,7 +94,7 @@ void ComputerRoom::start_class_locked(int group) {
             }
             attended_this_session_ks40[i] = false;
         }
-        for (int i = 0; i < total_ks44; ++i) {
+        for (int i = 0; i < TOTAL_KS44; ++i) {
             if (in_room_ks44[i] && !attended_this_session_ks44[i]) {
                 visits_ks44[i]++;
                 attended_this_session_ks44[i] = true;
@@ -115,7 +119,7 @@ void ComputerRoom::start_class_locked(int group) {
             
             // Преподаватель выводит всех оставшихся студентов
             int exited_count = 0;
-            for (int i = 0; i < this->total_ks40; ++i) {
+            for (int i = 0; i < this->TOTAL_KS40; ++i) {
                 if (this->in_room_ks40[i]) {
                     this->in_room_ks40[i] = false;
                     this->present_ks40--;
@@ -123,7 +127,7 @@ void ComputerRoom::start_class_locked(int group) {
                     exited_count++;
                 }
             }
-            for (int i = 0; i < this->total_ks44; ++i) {
+            for (int i = 0; i < this->TOTAL_KS44; ++i) {
                 if (this->in_room_ks44[i]) {
                     this->in_room_ks44[i] = false;
                     this->present_ks44--;
@@ -139,8 +143,8 @@ void ComputerRoom::start_class_locked(int group) {
             this->current_group = 0;
 
             // Сбросить флаги посещений для следующего занятия
-            for (int i = 0; i < this->total_ks40; ++i) this->attended_this_session_ks40[i] = false;
-            for (int i = 0; i < this->total_ks44; ++i) this->attended_this_session_ks44[i] = false;
+            for (int i = 0; i < this->TOTAL_KS40; ++i) this->attended_this_session_ks40[i] = false;
+            for (int i = 0; i < this->TOTAL_KS44; ++i) this->attended_this_session_ks44[i] = false;
 
             lock.unlock();
             this->cv.notify_all();
@@ -160,13 +164,13 @@ void ComputerRoom::stop() {
  * @param group Идентификатор группы студента (1 - КС-40, 2 - КС-44)
  * @param student_id Уникальный идентификатор студента в пределах группы
  */
-void ComputerRoom::student_behavior(int group, int student_id) {
+void ComputerRoom::studentBehavior(int group, int student_id) {
     std::string group_name = (group == 1) ? "КС-40" : "КС-44";
 
     while (!stop_flag) {
     
         // Генерируем случайное время ожидания перед попыткой входа, как будто студент решает приходить ли ему на занятие
-        int S = get_random_time();
+        int S = getRandomTime();
         
         // Блок с захватом мьютекса для проверки условий и изменения состояния
         {
@@ -183,7 +187,7 @@ void ComputerRoom::student_behavior(int group, int student_id) {
                 /**
                  * @condition Условия для входа в класс: если есть свободные места, занятие не идет, идет занятие группы студента
                  */
-                bool can_enter_now = (occupancy < capacity) && (!class_in_session || current_group == group);
+                bool can_enter_now = (occupancy < CAPACITY) && (!class_in_session || current_group == group);
 
                 if (can_enter_now) {
                     // Когла получилось войти в класс, обновляем его заполненность
@@ -201,8 +205,8 @@ void ComputerRoom::student_behavior(int group, int student_id) {
                     std::cout << "\t> Всего в классе: " << occupancy << ", КС-40: " << present_ks40  << ", КС-44: " << present_ks44 << "\n";
 
                     // Проверка для начала занятия
-                    if (!class_in_session && can_start_class(group)) {
-                        start_class_locked(group);
+                    if (!class_in_session && canStartClass(group)) {
+                        startClassLocked(group);
                     }
 
                     // + посещение студенту, если пришел на занятие, даже после начала
@@ -297,7 +301,7 @@ void ComputerRoom::student_behavior(int group, int student_id) {
 }
 
 
-bool ComputerRoom::all_students_completed() {
+bool ComputerRoom::allStudentsCompleted() {
     std::lock_guard<std::mutex> lock(mtx);
     for (int v : visits_ks40) if (v < 2) return false;
     for (int v : visits_ks44) if (v < 2) return false;
@@ -307,20 +311,20 @@ bool ComputerRoom::all_students_completed() {
 /**
  * @brief Выводит  статистику посещений
  */
-void ComputerRoom::print_statistics() {
+void ComputerRoom::printStatistics() {
     std::lock_guard<std::mutex> lock(mtx);
     
     std::cout << std::string(60, '*') << "\n";
     std::cout << "\tИТОГОВАЯ СТАТИСТИКА\n";
     std::cout << std::string(60, '*') << "\n";
     std::cout << "Группа КС-40 (30 студентов):\n";
-    for (int i = 0; i < total_ks40; ++i) {
+    for (int i = 0; i < TOTAL_KS40; ++i) {
         std::cout << "\tСтудент " << i << ": " << visits_ks40[i] << " посещений";
         std::cout << "\n";
     }
     std::cout << std::string(60, '*') << "\n";
     std::cout << "Группа КС-44 (24 студента):\n";
-    for (int i = 0; i < total_ks44; ++i) {
+    for (int i = 0; i < TOTAL_KS44; ++i) {
         std::cout << "\tСтудент " << i << ": " << visits_ks44[i] << " посещений";
         std::cout << "\n";
     }

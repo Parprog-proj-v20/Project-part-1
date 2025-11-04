@@ -8,7 +8,7 @@
 #include <iostream>
 #include <locale>
 #include <clocale>
-#include "../include/computer_room.h"
+#include "../include/computerRoom.h"
 
 class ThreadSafetyTest : public ::testing::Test {
 protected:
@@ -34,7 +34,7 @@ TEST_F(ThreadSafetyTest, NoRaceConditionOnStateAccess) {
     for (int i = 0; i < 10; ++i) {
         threads.emplace_back([&, total_ops = TOTAL_OPERATIONS]() {
             for (int j = 0; j < total_ops / 10; ++j) {
-                room.all_students_completed();
+                room.allStudentsCompleted();
                 successful_operations++;
                 std::this_thread::sleep_for(std::chrono::microseconds(10));
             }
@@ -46,13 +46,13 @@ TEST_F(ThreadSafetyTest, NoRaceConditionOnStateAccess) {
     }
 
     EXPECT_EQ(successful_operations, TOTAL_OPERATIONS);
-    EXPECT_NO_THROW(room.print_statistics());
+    EXPECT_NO_THROW(room.printStatistics());
 }
 
 /**
  * @brief Тест 2: Проверка безопасности методов статистики
  * 
- * Проверяем, что print_statistics и all_students_completed безопасны
+ * Проверяем, что printStatistics и allStudentsCompleted безопасны
  */
 TEST_F(ThreadSafetyTest, StatisticsMethodsThreadSafe) {
     ComputerRoom room;
@@ -67,10 +67,10 @@ TEST_F(ThreadSafetyTest, StatisticsMethodsThreadSafe) {
             while (!stop_flag) {
                 try {
                     if (i % 2 == 0) {
-                        room.all_students_completed();
+                        room.allStudentsCompleted();
                     }
                     else {
-                        room.print_statistics();
+                        room.printStatistics();
                     }
                 }
                 catch (const std::exception& e) {
@@ -85,7 +85,7 @@ TEST_F(ThreadSafetyTest, StatisticsMethodsThreadSafe) {
     std::vector<std::thread> students;
     for (int i = 0; i < 5; ++i) {
         students.emplace_back([&room, i]() {
-            room.student_behavior(1, i);
+            room.studentBehavior(1, i);
             });
     }
 
@@ -121,16 +121,16 @@ TEST_F(ThreadSafetyTest, NoDeadlockInComplexScenarios) {
             while (!test_completed) {
                 switch ((i + rand()) % 4) {
                 case 0:
-                    room.student_behavior(1, i % 30);
+                    room.studentBehavior(1, i % 30);
                     break;
                 case 1:
-                    room.student_behavior(2, i % 24);
+                    room.studentBehavior(2, i % 24);
                     break;
                 case 2:
-                    room.all_students_completed();
+                    room.allStudentsCompleted();
                     break;
                 case 3:
-                    room.print_statistics();
+                    room.printStatistics();
                     break;
                 }
 
@@ -170,7 +170,7 @@ TEST_F(ThreadSafetyTest, ConcurrentStopCalls) {
 
     for (int i = 0; i < 10; ++i) {
         students.emplace_back([&room, i]() {
-            room.student_behavior(1, i);
+            room.studentBehavior(1, i);
             });
     }
 
@@ -196,5 +196,5 @@ TEST_F(ThreadSafetyTest, ConcurrentStopCalls) {
     }
 
     EXPECT_GE(stop_calls_count, STOPPER_THREADS * 5);
-    EXPECT_NO_THROW(room.print_statistics());
+    EXPECT_NO_THROW(room.printStatistics());
 }

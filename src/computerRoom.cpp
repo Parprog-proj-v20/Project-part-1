@@ -1,4 +1,4 @@
-#include "../include/computer_room.h"
+#include "../include/computerRoom.h"
 #include <iostream>
 #include <random>
 #include <thread>

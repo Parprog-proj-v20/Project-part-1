@@ -9,11 +9,11 @@ private:
   std::mutex mtx; 
     std::condition_variable cv; // Условная переменная для ожидания событий
 
-    const int capacity = 20; // Максимальная вместимость компьютерного класса
-    const int total_ks40 = 30; // Общее кол-во студентов в КС-40
-    const int total_ks44 = 24; // Общее кол-во студентов в КС-44
-    const int need_ks40 = 15; // Необходимое кол-во студентов КС-40 для начала занятия
-    const int need_ks44 = 12; // Необходимое кол-во студентов КС-44 для начала занятия
+    const int CAPACITY = 20; // Максимальная вместимость компьютерного класса
+    const int TOTAL_KS40 = 30; // Общее кол-во студентов в КС-40
+    const int TOTAL_KS44 = 24; // Общее кол-во студентов в КС-44
+    const int NEED_KS40 = 15; // Необходимое кол-во студентов КС-40 для начала занятия
+    const int NEED_KS44 = 12; // Необходимое кол-во студентов КС-44 для начала занятия
 
     // Текущее состояние компьютерного класса
     int occupancy = 0; // Кол-во студентов в классе
@@ -33,9 +33,9 @@ private:
     std::vector<bool> attended_this_session_ks44; // Флаги посещения текущего занятия для КС-44
 
     // Доп методы
-    int get_random_time();
-    bool can_start_class(int group);
-    void start_class_locked(int group);
+    int getRandomTime();
+    bool canStartClass(int group);
+    void startClassLocked(int group);
 
 
 public:
@@ -62,19 +62,19 @@ public:
      * 
      * Метод моделирует поведение студента: попытки войти в класс, ожидание начала занятия, получение посещений и выход из класса.
      */
-    void student_behavior(int group, int student_id); 
+    void studentBehavior(int group, int student_id); 
     
     /**
      * @brief Проверяет, все ли студенты выполнили требования по посещениям
      * 
      * @return true если все студенты посетили минимум 2 занятия, false в обратном случае
      */
-    bool all_students_completed();
+    bool allStudentsCompleted();
     
     /**
      * @brief Выводит подробную статистику посещений
      * 
      * Отображает количество посещений для каждого студента в удобочитаемом формате.
      */
-    void print_statistics();
+    void printStatistics();
 };

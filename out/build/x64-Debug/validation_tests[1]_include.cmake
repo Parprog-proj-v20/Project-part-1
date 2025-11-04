@@ -1,5 +1,0 @@
-if(EXISTS "C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/validation_tests[1]_tests.cmake")
-  include("C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/validation_tests[1]_tests.cmake")
-else()
-  add_test(validation_tests_NOT_BUILT validation_tests_NOT_BUILT)
-endif()

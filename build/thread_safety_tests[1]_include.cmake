@@ -1,5 +1,0 @@
-if(EXISTS "C:/Users/user/source/repos/Project-part-1/build/thread_safety_tests[1]_tests.cmake")
-  include("C:/Users/user/source/repos/Project-part-1/build/thread_safety_tests[1]_tests.cmake")
-else()
-  add_test(thread_safety_tests_NOT_BUILT thread_safety_tests_NOT_BUILT)
-endif()

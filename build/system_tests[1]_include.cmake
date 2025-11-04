@@ -1,5 +1,0 @@
-if(EXISTS "C:/Users/user/source/repos/Project-part-1/build/system_tests[1]_tests.cmake")
-  include("C:/Users/user/source/repos/Project-part-1/build/system_tests[1]_tests.cmake")
-else()
-  add_test(system_tests_NOT_BUILT system_tests_NOT_BUILT)
-endif()

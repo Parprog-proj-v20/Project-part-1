@@ -1,5 +1,0 @@
-add_test([=[SystemTest.CompleteSystemSimulationUntilCompletion]=]  C:/Users/user/source/repos/Project-part-1/build/Debug/system_tests.exe [==[--gtest_filter=SystemTest.CompleteSystemSimulationUntilCompletion]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[SystemTest.CompleteSystemSimulationUntilCompletion]=]  PROPERTIES WORKING_DIRECTORY C:/Users/user/source/repos/Project-part-1/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-add_test([=[SystemTest.SystemBoundaryConditions]=]  C:/Users/user/source/repos/Project-part-1/build/Debug/system_tests.exe [==[--gtest_filter=SystemTest.SystemBoundaryConditions]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[SystemTest.SystemBoundaryConditions]=]  PROPERTIES WORKING_DIRECTORY C:/Users/user/source/repos/Project-part-1/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set(  system_tests_TESTS SystemTest.CompleteSystemSimulationUntilCompletion SystemTest.SystemBoundaryConditions)

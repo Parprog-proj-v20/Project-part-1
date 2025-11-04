@@ -1,0 +1,7 @@
+add_test([=[ValidationTest.NeverMoreExitsThanEnters]=]  C:/Users/user/source/repos/Project-part-1/build/Debug/validation_tests.exe [==[--gtest_filter=ValidationTest.NeverMoreExitsThanEnters]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[ValidationTest.NeverMoreExitsThanEnters]=]  PROPERTIES WORKING_DIRECTORY C:/Users/user/source/repos/Project-part-1/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[ValidationTest.NoDeadlockUnderFullLoad]=]  C:/Users/user/source/repos/Project-part-1/build/Debug/validation_tests.exe [==[--gtest_filter=ValidationTest.NoDeadlockUnderFullLoad]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[ValidationTest.NoDeadlockUnderFullLoad]=]  PROPERTIES WORKING_DIRECTORY C:/Users/user/source/repos/Project-part-1/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[ValidationTest.GroupCompetitionHandledCorrectly]=]  C:/Users/user/source/repos/Project-part-1/build/Debug/validation_tests.exe [==[--gtest_filter=ValidationTest.GroupCompetitionHandledCorrectly]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[ValidationTest.GroupCompetitionHandledCorrectly]=]  PROPERTIES WORKING_DIRECTORY C:/Users/user/source/repos/Project-part-1/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  validation_tests_TESTS ValidationTest.NeverMoreExitsThanEnters ValidationTest.NoDeadlockUnderFullLoad ValidationTest.GroupCompetitionHandledCorrectly)

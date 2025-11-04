@@ -1,0 +1,21 @@
+# ninja log v6
+9	126	7839020852361080	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	296518f147191376
+9	126	7839020852361080	C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	296518f147191376
+127	6124	7839020912362837	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	bc5db95b618aade1
+127	6124	7839020912362837	C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	bc5db95b618aade1
+6125	6245	7839020913564033	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	b725edd0b62cfab5
+6125	6245	7839020913564033	C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	b725edd0b62cfab5
+6245	6362	7839020914662718	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	2770445e6aef09d8
+6245	6362	7839020914662718	C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	2770445e6aef09d8
+6362	6477	7839020915881616	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	5df5269cbbf26575
+6362	6477	7839020915881616	C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	5df5269cbbf26575
+6478	6593	7839020917063947	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	8b83ebe11af00dac
+6478	6593	7839020917063947	C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	8b83ebe11af00dac
+6594	6710	7839020918169027	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	3bcd777f0b6579e9
+6594	6710	7839020918169027	C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	3bcd777f0b6579e9
+6710	6822	7839020919278432	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	44f56a0b4878e807
+6710	6822	7839020919278432	C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	44f56a0b4878e807
+6822	6985	7839020920964740	CMakeFiles/googletest-populate-complete	b6697dddc1cdc1fc
+6822	6985	7839020920964740	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	b6697dddc1cdc1fc
+6822	6985	7839020920964740	C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/_deps/googletest-subbuild/CMakeFiles/googletest-populate-complete	b6697dddc1cdc1fc
+6822	6985	7839020920964740	C:/Users/user/source/repos/Project-part-1/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	b6697dddc1cdc1fc

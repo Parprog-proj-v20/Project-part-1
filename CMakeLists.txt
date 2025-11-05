@@ -36,12 +36,6 @@ if(BUILD_TESTS)
         target_link_libraries(${test_name} PRIVATE gtest gtest_main)
     endfunction()
 
-    add_test_executable(unit_tests tests/unit_tests.cpp src/computerRoom.cpp)
-    add_test_executable(integration_tests tests/integration_tests.cpp src/computerRoom.cpp)
-    add_test_executable(validation_tests tests/validation_tests.cpp src/computerRoom.cpp)
-    add_test_executable(system_tests tests/system_tests.cpp src/computerRoom.cpp)
-    add_test_executable(thread_safety_tests tests/thread_safety_tests.cpp src/computerRoom.cpp)
-
     include(GoogleTest)
     gtest_discover_tests(unit_tests)
     gtest_discover_tests(integration_tests)
